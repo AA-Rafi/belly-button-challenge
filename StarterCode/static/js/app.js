@@ -70,4 +70,31 @@ function bar(SelectedValue) {
 }
 
 // bubble
-function bubble(selectedValue){}
+function bubble(SelectedValue){
+d3.json(url).then((data) => {
+    let samples = data.samples;
+
+    let filteredData = samples.filter((sample) => sample.id === SelectedValue);
+
+    let obj = filteredData[0];
+    
+    let trace = [{
+        x: obj.otu_ids,
+        y: obj.sample_values,
+        text: obj.otu_labels,
+        mode: "markers",
+        marker: {
+            size: obj.sample_values,
+            color: obj.otu_ids,
+            colorscale: "Earth"
+        }
+    }];
+
+    let layout = {
+        title: "Bacteria Cultures Per Sample",
+        xaxis: {title: "OTU ID"}
+    };
+
+    Plotly.newPlot("bubble", trace, layout);
+});
+}
