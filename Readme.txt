@@ -1,0 +1,1 @@
+app.js is located in "StarterCode/static/js"
