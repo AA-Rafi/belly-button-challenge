@@ -10,7 +10,7 @@ function init() {
 
         let names = data.names;
 
-        names.foreach((name) => {
+        names.forEach((name) => {
             dropdown.append("option").text(name).property("value", name);
         });
         let name = names[0];
@@ -98,3 +98,67 @@ d3.json(url).then((data) => {
     Plotly.newPlot("bubble", trace, layout);
 });
 }
+
+//gauge chart
+function gauge(SelectedValue) {
+    d3.json(url).then((data) => {
+        let metadata = data.metadata;
+        
+        let filteredData = metadata.filter((meta) => meta.id == SelectedValue);
+      
+        let obj = filteredData[0]
+            
+        
+        var trace = [{
+            domain: { x: [0, 1], y: [0, 1] },
+            value: obj.wfreq,
+            title: { text: "<b>Belly Button Washing Frequency</b><br>Scrubs per Week", font: {size: 24}},
+            delta: { reference: 8, increasing: { color: "blue" } },
+            type: "indicator", 
+            mode: "gauge+number+delta",
+            gauge: {
+                axis: {range: [null, 9],tickmode: "linear",tickwidth: 1, tickcolor: "darkblue" }, 
+                bar: { color: "green"},
+
+                bgcolor: "white",
+          
+                borderwidth: 2,
+          
+                bordercolor: "gray",
+                steps: [
+                    {range: [0, 1], color: "rgba(255, 255, 255, 0)"},
+                    {range: [1, 2], color: "rgba(232, 226, 202, .5)"},
+                    {range: [2, 3], color: "rgba(210, 206, 145, .5)"},
+                    {range: [3, 4], color:  "rgba(202, 209, 95, .5)"},
+                    {range: [4, 5], color:  "rgba(184, 205, 68, .5)"},
+                    {range: [5, 6], color: "rgba(170, 202, 42, .5)"},
+                    {range: [6, 7], color: "rgba(142, 178, 35 , .5)"},
+                    {range: [7, 8], color:  "rgba(110, 154, 22, .5)"},
+                    {range: [8, 9], color: "rgba(50, 143, 10, 0.5)"}
+                ],
+                threshold: {
+
+                    line: { color: "red", width: 4 },
+            
+                    thickness: 0.75,
+            
+                    value: 8.8
+            
+                  }  
+            }
+        }];
+
+          });
+         
+         Plotly.newPlot("gauge", trace,layout_g);
+    };
+
+// toggle for new plots
+function optionChanged(selectedValue) {
+    demo(selectedValue);
+    bar(selectedValue);
+    bubble(selectedValue);
+    gauge(selectedValue)
+}
+
+init();
